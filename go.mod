@@ -1,4 +1,4 @@
-module github.com/Jjmgx/mgxlog
+module mgxlog
 
 go 1.17
 
