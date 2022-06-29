@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"strconv"
+	"time"
 
 	"reflect"
 	"strings"
@@ -406,7 +407,12 @@ func (this *MgxOrm) SaveObject(obj interface{}, tabname, zj string) (int64, erro
 			}
 			zds += "`" + strings.ToLower(f) + "`"
 			zwf += "?"
-			tjs = append(tjs, value.FieldByName(f).Interface())
+			if v, ok := value.FieldByName(f).Interface().(time.Time); ok {
+				tjs = append(tjs, v.Format("2006-01-02 15:04:05"))
+			} else {
+				tjs = append(tjs, value.FieldByName(f).Interface())
+			}
+
 		}
 	}
 	sql := "INSERT INTO `" + tabname + "` (" + zds + ") VALUES (" + zwf + ")"
