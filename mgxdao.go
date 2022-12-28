@@ -30,6 +30,19 @@ func (this *MgxOrm) Open(driverName, dataSourceName string) error {
 	}
 	return nil
 }
+
+func (this *MgxOrm) OpenWithConfig(driverName, dataSourceName string, min, max int, maxIdleTime, maxLifeTime time.Duration) error {
+	var err error
+	if this.Db, err = sql.Open(driverName, dataSourceName); err != nil {
+		return err
+	}
+	this.Db.SetMaxIdleConns(min)
+	this.Db.SetMaxOpenConns(max)
+	this.Db.SetConnMaxIdleTime(maxIdleTime)
+	this.Db.SetConnMaxLifetime(maxLifeTime)
+	return nil
+}
+
 func (this *MgxOrm) OpenEx(driverName, root, pass, host, port, database, charset string) error {
 	var err error
 	if this.Db, err = sql.Open(driverName, root+":"+pass+"@tcp("+host+":"+port+")/"+database+"?charset="+charset+"&parseTime=True&loc=Local"); err != nil {
